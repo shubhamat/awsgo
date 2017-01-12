@@ -3,6 +3,6 @@ awsuptime.go  is a utility that prints the time duration an instance has been ru
 
 E.g.
 
-sam@saminux ~/awsgo $ ./awsuptime
-PublicIpAddress         UpTime
-5x.y.z.5                11m46.65482121s
+sam@saminux ~/awsgo $ ./awsuptime  
+PublicIpAddress         UpTime  
+5x.y.z.5                11m46.65482121s  
