@@ -11,4 +11,7 @@ bucket.go is another hello-world isuqe utility that lists the S3 buckets, or upl
 sam@saminux ~/awsgo $ go run bucket.go  
 Buckets  
 saminuxbucket1  
+  
+sam@saminux ~/awsgo $ go run buckets.go --uploadfile=/home/sam/desc.txt saminuxbucket1  
+Successfully uploaded "/home/sam/desc.txt" to "saminuxbucket1"  
 
