@@ -8,7 +8,7 @@ PublicIpAddress         UpTime
 5x.y.z.5                11m46.65482121s  
   
 # bucket.go  
-bucket.go is another hello-world isuqe utility that lists the S3 buckets.   
+bucket.go is another hello-world isuqe utility that lists the S3 buckets, or uploads/downloads to/from them.   
 sam@saminux ~/awsgo $ go run bucket.go  
 Buckets  
 saminuxbucket1  
