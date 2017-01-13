@@ -6,8 +6,9 @@ import (
 	"flag"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/aws/aws-sdk-go/service/s3manager"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"os"
+	"path"
 )
 
 var ufile = flag.String("uploadfile", "", "File to upload to S3 bucket")
@@ -85,10 +86,10 @@ func upload() {
 	defer file.Close()
 
 	uploader := s3manager.NewUploader(s)
-
+	key := path.Base(*ufile)
 	_, err = uploader.Upload(&s3manager.UploadInput{
-		Bucket: aws.String(bucket),
-		Key:    aws.String(*ufile),
+		Bucket: &bucket,
+		Key:    &key,
 		Body:   file,
 	})
 	if err != nil {
