@@ -29,8 +29,20 @@ func main() {
 
 	svc = s3.New(s)
 
+	b := flag.Args()
+	if len(b) != 1 && !*list {
+		fmt.Println("Must specify bucket name with --uploadfile or --downloadfile")
+		usage()
+	} else if len(b) > 0 {
+		bucket = b[0]
+	}
+
 	if *list {
-		printBuckets()
+		if bucket == "" {
+			printBuckets()
+		} else {
+			printBucketFiles()
+		}
 	}
 
 	if *ufile != "" && *dfile != "" {
@@ -38,18 +50,10 @@ func main() {
 		usage()
 	}
 
-	if *ufile == "" && *dfile == "" {
-		fmt.Println("Must specify --uploadfile or --downloadfile")
+	if *ufile == "" && *dfile == "" && !*list {
+		fmt.Println("Must specify --list, --uploadfile or --downloadfile")
 		usage()
 	}
-
-	b := flag.Args()
-	if len(b) != 1 {
-		fmt.Println("Must specify bucket name with --uploadfile or --downloadfile")
-		usage()
-	}
-
-	bucket = b[0]
 
 	if *ufile != "" {
 		upload()
@@ -73,6 +77,19 @@ func printBuckets() {
 	fmt.Printf("Buckets\n")
 	for _, b := range result.Buckets {
 		fmt.Printf("%s\n", *b.Name)
+	}
+	os.Exit(0)
+}
+
+func printBucketFiles() {
+	result, err := svc.ListObjectsV2(&s3.ListObjectsV2Input{Bucket: &bucket})
+	if err != nil {
+		fmt.Println("Error fetching Objects from AWS", err)
+		os.Exit(1)
+	}
+	fmt.Printf("Files of %s:\n", bucket)
+	for _, b := range result.Contents {
+		fmt.Printf("\t%s\n", *b.Key)
 	}
 	os.Exit(0)
 }
@@ -109,8 +126,7 @@ func download() {
 		os.Exit(1)
 	}
 
-
-  fmt.Printf("Downloading...\n")
+	fmt.Printf("Downloading...\n")
 	biloader := s3manager.NewDownloader(s)
 	_, err = biloader.Download(file, &s3.GetObjectInput{
 		Bucket: &bucket,
